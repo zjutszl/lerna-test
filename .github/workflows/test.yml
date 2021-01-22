@@ -4,8 +4,6 @@ env:
   KEY: 888
 jobs:
   setup:
-    env:
-      KEY: 88
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -19,8 +17,6 @@ jobs:
             modules-
           path: '**/node_modules'
       - name: echo KEY
-        env:
-          KEY: ${{ env.KEY }}
         run: echo "$KEY"
       - name: install node_modules if cache missed
         if: steps.yarn_cache.outputs.cache-hit != 'true'
@@ -43,8 +39,6 @@ jobs:
             modules-
           path: '**/node_modules'
       - name: echo KEY
-        env:
-          KEY: ${{ env.KEY }}
         run: echo "$KEY"
       - name: test
         run: yarn lerna run test:all
