@@ -1,7 +1,11 @@
 name: Unit Test
-on: [pull_request]
+on: [push, pull_request]
+env:
+  KEY: 888
 jobs:
   setup:
+    env:
+      KEY: 88
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,12 +18,18 @@ jobs:
             modules-${{ hashFiles('**/yarn.lock') }}
             modules-
           path: '**/node_modules'
+      - name: echo KEY
+        env:
+          KEY: ${{ env.KEY }}
+        run: echo "$KEY"
       - name: install node_modules if cache missed
         if: steps.yarn_cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
   
   test:
     runs-on: ubuntu-latest
+    env:
+      KEY: 77
     steps:
       - uses: actions/checkout@v2
       - name: restore node_modules
@@ -31,5 +41,9 @@ jobs:
             modules-${{ hashFiles('**/yarn.lock') }}
             modules-
           path: '**/node_modules'
+      - name: echo KEY
+        env:
+          KEY: ${{ env.KEY }}
+        run: echo "$KEY"
       - name: test
         run: yarn lerna run test:all
